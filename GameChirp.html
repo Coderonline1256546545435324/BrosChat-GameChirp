@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameChirp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+        }
+        header {
+            background: #4CAF50;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+            height: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        header h1 {
+            margin: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: #333;
+            padding: 20px;
+            position: fixed;
+            top: 60px;
+            bottom: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        }
+        .sidebar button {
+            display: block;
+            width: 100%;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .sidebar button:hover {
+            background: #45a049;
+        }
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+            width: calc(100% - 220px);
+            overflow-y: auto;
+        }
+        .form-container, .profile, .message-form, .notification {
+            background: #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .form-container h2, .profile h2, .message-form h3 {
+            margin-top: 0;
+        }
+        .form-container input, .form-container textarea, .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: none;
+            box-sizing: border-box;
+        }
+        .form-container input, .form-container textarea {
+            background: #555;
+            color: #fff;
+        }
+        .form-container button {
+            background: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background: #45a049;
+        }
+        .profile .info {
+            margin-bottom: 15px;
+        }
+        .profile .info span {
+            font-weight: bold;
+        }
+        .profile .info input, .profile .info textarea {
+            background: #555;
+            color: #fff;
+            border: none;
+            width: 100%;
+            margin: 5px 0;
+        }
+        .profile .info button {
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .profile .info button:hover {
+            background: #45a049;
+        }
+        .post {
+            background: #333;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .post .username {
+            font-weight: bold;
+        }
+        .post .timestamp {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .post .content {
+            margin-top: 10px;
+        }
+        .post .reactions button {
+            background: #555;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            color: #fff;
+        }
+        .post .reactions button:hover {
+            background: #666;
+        }
+        .notification {
+            background: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .message-form textarea {
+            background: #555;
+            color: #fff;
+            border: none;
+        }
+        .message-form button {
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .message-form button:hover {
+            background: #45a049;
+        }
+        .login-form, .register-form {
+            display: none;
+        }
+        .login-form.active, .register-form.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bros Chat</h1>
+    </header>
+    <div class="sidebar">
+        <button onclick="showProfile()">Profile</button>
+        <button onclick="showPostForm()">Post Chirp</button>
+        <button onclick="showMessageForm()">Direct Messages</button>
+        <button onclick="showNotifications()">Notifications</button>
+        <button onclick="showLoginForm()">Login</button>
+        <button onclick="showRegisterForm()">Register</button>
+    </div>
+    <div class="main-content">
+        <!-- Login Form -->
+        <div class="form-container login-form" id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="showRegisterForm()">Register</button>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-container register-form" id="registerForm">
+            <h2>Register</h2>
+            <input type="text" id="registerUsername" placeholder="Username">
+            <input type="password" id="registerPassword" placeholder="Password">
+            <button onclick="register()">Register</button>
+            <button onclick="showLoginForm()">Back to Login</button>
+        </div>
+
+        <!-- Profile -->
+        <div class="profile" id="profile" style="display: none;">
+            <h2>Profile</h2>
+            <div class="info">
+                <span>Username:</span>
+                <input type="text" id="profileUsername" placeholder="Username">
+                <span>Bio:</span>
+                <textarea id="profileBio" placeholder="Bio"></textarea>
+                <button onclick="updateProfile()">Update Profile</button>
+            </div>
+        </div>
+
+        <!-- Post Form -->
+        <div class="form-container" id="postForm" style="display: none;">
+            <textarea id="chirpText" placeholder="What's happening?"></textarea>
+            <button onclick="postChirp()">Chirp</button>
+        </div>
+
+        <!-- Posts Feed -->
+        <div id="posts">
+            <!-- Posts will be inserted here -->
+        </div>
+
+        <!-- Message Form -->
+        <div class="message-form" id="messageForm" style="display:none;">
+            <h3>Direct Message</h3>
+            <input type="text" id="messageRecipient" placeholder="Recipient">
+            <textarea id="messageText" placeholder="Type your message here..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <!-- Notifications -->
+        <div id="notifications" class="notification" style="display: none;">
+            <div class="notification">New friend request from User123</div>
+            <!-- Additional notifications can be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        // Mock user data
+        let users = [
+            { username: 'User1', password: 'password1', bio: 'Gamer', friends: [] }
+        ];
+        let loggedInUser = null;
+
+        // Display login form
+        function showLoginForm() {
+            hideAll();
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        // Display register form
+        function showRegisterForm() {
+            hideAll();
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        // Display profile
+        function showProfile() {
+            if (!loggedInUser) {
+                alert('You must be logged in to view your profile');
+                return;
+            }
+            hideAll();
+            document.getElementById('profile').style.display = 'block';
+            document.getElementById('profileUsername').value = loggedInUser.username;
+            document.getElementById('profileBio').value = loggedInUser.bio;
+        }
+
+        // Display post form
+        function showPostForm() {
+            if (!loggedInUser) {
+                alert('You must be logged in to post a Chirp');
+                return;
+            }
+            hideAll();
+            document.getElementById('postForm').style.display = 'block';
+        }
+
+        // Display message form
+        function showMessageForm() {
+            if (!loggedInUser) {
+                alert('You must be logged in to send a message');
+                return;
+            }
+            hideAll();
+            document.getElementById('messageForm').style.display = 'block';
+        }
+
+        // Display notifications
+        function showNotifications() {
+            if (!loggedInUser) {
+                alert('You must be logged in to view notifications');
+                return;
+            }
+            hideAll();
+            document.getElementById('notifications').style.display = 'block';
+        }
+
+        // Hide all main content sections
+        function hideAll() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('profile').style.display = 'none';
+            document.getElementById('postForm').style.display = 'none';
+            document.getElementById('messageForm').style.display = 'none';
+            document.getElementById('notifications').style.display = 'none';
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                loggedInUser = user;
+                showProfile();
+                showPostForm();
+                showNotifications();
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        // Register function
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (users.some(u => u.username === username)) {
+                alert('Username already exists');
+                return;
+            }
+
+            users.push({ username, password, bio: '' });
+            showLoginForm();
+        }
+
+        // Update profile
+        function updateProfile() {
+            if (!loggedInUser) {
+                alert('You must be logged in to update your profile');
+                return;
+            }
+
+            loggedInUser.username = document.getElementById('profileUsername').value;
+            loggedInUser.bio = document.getElementById('profileBio').value;
+            alert('Profile updated!');
+        }
+
+        // Post Chirp
+        function postChirp() {
+            const chirpText = document.getElementById('chirpText').value;
+            if (!chirpText.trim()) {
+                alert('Please enter a Chirp before posting.');
+                return;
+            }
+
+            const postContainer = document.createElement('div');
+            postContainer.className = 'post';
+
+            const timestamp = new Date().toLocaleTimeString();
+
+            postContainer.innerHTML = `
+                <div class="username">${loggedInUser.username}</div>
+                <div class="timestamp">${timestamp}</div>
+                <div class="content">${chirpText}</div>
+                <div class="reactions">
+                    <button onclick="reactToPost(this)">Like</button>
+                    <button onclick="reactToPost(this)">Retweet</button>
+                </div>
+            `;
+
+            document.getElementById('posts').prepend(postContainer);
+            document.getElementById('chirpText').value = ''; // Clear the textarea
+        }
+
+        // React to post
+        function reactToPost(button) {
+            if (button.textContent === 'Like') {
+                button.textContent = 'Liked';
+                button.style.backgroundColor = '#ffadad';
+            } else if (button.textContent === 'Retweet') {
+                button.textContent = 'Retweeted';
+                button.style.backgroundColor = '#aad4ff';
+            }
+        }
+
+        // Send message
+        function sendMessage() {
+            const recipient = document.getElementById('messageRecipient').value;
+            const messageText = document.getElementById('messageText').value;
+
+            if (!messageText.trim()) {
+                alert('Please enter a message.');
+                return;
+            }
+
+            alert(`Message sent to ${recipient}!`);
+            document.getElementById('messageRecipient').value = ''; // Clear input
+            document.getElementById('messageText').value = ''; // Clear textarea
+            document.getElementById('messageForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
