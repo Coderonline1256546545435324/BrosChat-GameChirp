@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayerModule Documentation</title>
+<style>
+    body { font-family: 'Roboto', sans-serif; line-height: 1.6; background-color: #f9f9f9; margin: 0; padding: 0; }
+    header { background: #1e88e5; color: white; padding: 20px; text-align: center; }
+    nav { background: #1565c0; padding: 10px; display: flex; justify-content: space-around; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    section { padding: 40px; max-width: 1000px; margin: auto; background: white; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1, h2 { color: #0d47a1; }
+    pre { background: #e0e0e0; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code { background: #eeeeee; padding: 2px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>PlayerModule Documentation</h1>
+    <p>Author: Voided(dragon_gamer255555 | Discord: dragon_gamer255555#1234)</p>
+</header>
+
+<nav>
+    <a href="#getting-started">Getting Started</a>
+    <a href="#character-utils">Character Utilities</a>
+    <a href="#team-management">Team & Player Management</a>
+    <a href="#leaderstats">Leaderstats & Currency</a>
+    <a href="#tools-inventory">Tools & Inventory</a>
+    <a href="#events-animations">Events & Animations</a>
+    <a href="#server-client">Server & Client</a>
+</nav>
+
+<section id="getting-started">
+<h2>Getting Started</h2>
+<p>This section guides you on how to include and initialize PlayerModule in your Roblox project. Use the <code>require</code> function to load the module and wrap a player into a proxy object for easy method access.</p>
+<pre><code>local PlayerModule = require(path.to.PlayerModule)
+local plr = game.Players.LocalPlayer
+local myPlayer = PlayerModule.New(plr)</code></pre>
+<p>The <code>myPlayer</code> object allows you to call methods directly on the player without repeatedly passing the player reference. This is the foundation for all further interactions.</p>
+</section>
+
+<section id="character-utils">
+<h2>Character Utilities</h2>
+<p>These functions provide convenient access to the player's character, humanoid, root part, and movement-related properties.</p>
+<ul>
+<li><code>GetCharacter()</code> - Returns the player's character model.</li>
+<li><code>GetHumanoid()</code> - Returns the Humanoid instance from the character.</li>
+<li><code>GetRootPart()</code> - Returns the HumanoidRootPart, useful for teleportation or positioning.</li>
+<li><code>IsAlive()</code> - Checks whether the player is alive based on humanoid health.</li>
+<li><code>Respawn()</code> - Respawns the player; can optionally teleport to a custom spawn location.</li>
+<li><code>GetLookDirection()</code> - Returns the current look vector of the player.</li>
+<li><code>GetVelocity()</code> - Returns the player's movement velocity.</li>
+<li><code>GetPosition()</code> - Returns the player's current position as a Vector3.</li>
+</ul>
+<p>These functions allow precise control over player interactions, movement detection, and character monitoring.</p>
+</section>
+
+<section id="team-management">
+<h2>Team & Player Management</h2>
+<p>These methods manage team assignments, freezing movement, teleporting, and messaging players.</p>
+<ul>
+<li><code>GetTeam()</code> - Returns the player's current team.</li>
+<li><code>ChangeTeam(team)</code> - Moves the player to a different team.</li>
+<li><code>FreezePlayer(bool)</code> - Freezes or unfreezes a player, affecting walk speed and jump power.</li>
+<li><code>SetWalkSpeed(speed)</code> - Directly sets the player's walk speed.</li>
+<li><code>SetJumpPower(power)</code> - Sets the humanoid jump power.</li>
+<li><code>ResetCharacterAppearance()</code> - Reloads character appearance.</li>
+<li><code>TeleportTo(CFrame)</code> - Teleports the player to a specified position or CFrame.</li>
+<li><code>SendMessage(text)</code> - Sends a system message to the client (local player).</li>
+<li><code>Kick(reason)</code> - Kicks the player from the server (server-side use).</li>
+</ul>
+</section>
+
+<section id="leaderstats">
+<h2>Leaderstats & Currency</h2>
+<p>Functions for managing leaderstats and game currency, simplifying repetitive tasks in player progression and economy systems.</p>
+<ul>
+<li><code>AddLeaderstat(name, value)</code> - Adds a new leaderstat or initializes it if missing.</li>
+<li><code>GetLeaderstat(name)</code> - Returns the value of a leaderstat.</li>
+<li><code>SetLeaderstat(name, value)</code> - Sets a leaderstat to a specific value.</li>
+<li><code>IncrementLeaderstat(name, amount)</code> - Increments a stat by an amount.</li>
+<li><code>DecrementLeaderstat(name, amount)</code> - Decrements a stat by an amount.</li>
+<li><code>HasGamepass(gamepassId)</code> - Returns true if player owns the gamepass (placeholder for developer implementation).</li>
+<li><code>HasAsset(assetId)</code> - Checks asset ownership (placeholder).</li>
+<li><code>AwardCurrency(amount, type)</code> - Adds currency (developer-defined).</li>
+<li><code>RemoveCurrency(amount, type)</code> - Removes currency (developer-defined).</li>
+<li><code>GetCurrency(type)</code> - Retrieves currency amount (developer-defined).</li>
+</ul>
+</section>
+
+<section id="tools-inventory">
+<h2>Tools & Inventory</h2>
+<p>Manage player inventory, equip, unequip, and transfer tools with these methods.</p>
+<ul>
+<li><code>GiveTool(tool)</code> - Adds a tool to player's backpack.</li>
+<li><code>RemoveTool(name)</code> - Removes a specific tool from backpack and character.</li>
+<li><code>RemoveAllTools()</code> - Clears all tools from backpack and character.</li>
+<li><code>EquipTool(name)</code> - Equips a tool from backpack.</li>
+<li><code>UnequipTool()</code> - Unequips current tool.</li>
+<li><code>HasTool(name)</code> - Checks if player owns a tool.</li>
+<li><code>CloneTool(tool)</code> - Clones and gives a tool to the player.</li>
+<li><code>TransferTool(toPlayer, name)</code> - Moves a tool from this player to another.</li>
+<li><code>GetEquippedTool()</code> - Returns currently equipped tool.</li>
+<li><code>DropTool(name)</code> - Drops a tool into the workspace.</li>
+</ul>
+</section>
+
+<section id="events-animations">
+<h2>Events & Animations</h2>
+<p>Subscribe to player events and manage animations.</p>
+<ul>
+<li><code>OnRespawn(callback)</code> - Fires when the player respawns.</li>
+<li><code>OnDeath(callback)</code> - Fires on player death.</li>
+<li><code>OnTeamChange(callback)</code> - Fires when the team changes.</li>
+<li><code>OnToolEquipped(callback)</code> - Fires when a tool is equipped.</li>
+<li><code>OnToolUnequipped(callback)</code> - Fires when a tool is unequipped.</li>
+<li><code>OnLeaderstatChange(statName, callback)</code> - Fires when a leaderstat changes.</li>
+<li><code>BindActionToInput(key, callback)</code> - Binds key input to a callback.</li>
+<li><code>PlayAnimation(animId)</code> - Plays an animation on the humanoid.</li>
+<li><code>StopAnimation(track)</code> - Stops an animation track.</li>
+<li><code>SetRespawnLocation(CFrame)</code> - Sets a custom respawn location.</li>
+</ul>
+</section>
+
+<section id="server-client">
+<h2>Server & Client Helpers</h2>
+<p>Server and client specific methods for managing players.</p>
+<ul>
+<li><code>Server.RespawnPlayer(player)</code> - Respawns player on server.</li>
+<li><code>Server.Kick(player, reason)</code> - Kicks player from server.</li>
+<li><code>Server.GetFromCharacter(character)</code> - Gets player from character (server).</li>
+<li><code>Client.GetLocalPlayer()</code> - Returns local player (client-only).</li>
+<li><code>Client.GetMouse()</code> - Returns player's mouse object (client-only).</li>
+</ul>
+</section>
+
+</body>
+</html>
